@@ -15,9 +15,9 @@ namespace CQRS.Handlers
             _postService = postService;
         }
 
-        public Task<ResponseModel<List<PostModel>>> Handle(GetAllPostsQueries request, CancellationToken cancellationToken)
+        public async Task<ResponseModel<List<PostModel>>> Handle(GetAllPostsQueries request, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return await _postService.GetAllPost();
         }
     }
 }

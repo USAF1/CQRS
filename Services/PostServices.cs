@@ -8,9 +8,27 @@ namespace CQRS.Services
 
         private List<PostModel> posts = new List<PostModel>();
 
-        public Task<ResponseModel<PostModel>> AddPost(PostModel model)
+        public async Task<ResponseModel<PostModel>> AddPost(PostModel model)
         {
-            throw new NotImplementedException();
+            ResponseModel<PostModel> responseModel = new ResponseModel<PostModel>();
+
+            try
+            {
+                model.Id = new Guid();
+                posts.Add(model);
+                responseModel.Status = StatusCodes.Status200OK;
+                responseModel.Message = "Data added succesfull";
+                responseModel.Data = model;
+            }
+            catch (Exception ex)
+            {
+                responseModel.Status = StatusCodes.Status500InternalServerError;
+                responseModel.Message = $"Data not added succesfull. Error: {ex.Message.ToString()}";
+                responseModel.Data = model;
+
+            }
+
+            return  responseModel;
         }
 
         public async Task<ResponseModel<List<PostModel>>> GetAllPost()

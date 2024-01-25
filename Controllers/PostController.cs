@@ -1,4 +1,6 @@
-﻿using CQRS.Models;
+﻿using CQRS.Commands;
+using CQRS.Models;
+using CQRS.Quries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,17 +18,20 @@ namespace CQRS.Controllers
 
         [HttpGet]
         [Route("getallpost")]
-        public async  Task<IActionResult> GetAllPost()
+        public async  Task<ResponseModel<List<PostModel>>> GetAllPost()
         {
+            var query = new GetAllPostsQueries();
+            ResponseModel<List<PostModel>> data  = await _mediator.Send(query);
 
-            return View();
+            return data;    
         }
 
         [HttpPost]
         [Route("addpost")]
-        public async Task<IActionResult> AddPost([FromBody] PostModel model)
+        public async Task<ResponseModel<PostModel>> AddPost([FromBody] PostModel model)
         {
-            return View();
+            var command = new PostAddCommand(model);
+            return await _mediator.Send(command);
         }
     }
 }
